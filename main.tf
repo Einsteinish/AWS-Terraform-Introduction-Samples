@@ -10,7 +10,7 @@ resource "aws_instance" "busybox_web_server" {
   user_data = <<-EOF
               #!/bin/bash
               echo "Hello, Terraform & AWS" > index.html
-              nohup busybox httpd -f -p "${var.http_port}" &
+              nohup busybox httpd -f -p "${var.server_port}" &
               EOF
 
   tags = {
@@ -21,14 +21,14 @@ resource "aws_instance" "busybox_web_server" {
 resource "aws_security_group" "busybox" {
   name = "terraform-busybox-sg"
   ingress {
-    from_port   = var.http_port
-    to_port     = var.http_port
+    from_port   = var.server_port
+    to_port     = var.server_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
-variable "http_port" {
+variable "server_port" {
   description = "The port the web server will be listening"
   type        = number
   default     = 8080
