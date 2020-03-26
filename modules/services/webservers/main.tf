@@ -2,18 +2,6 @@ provider "aws" {
   region = "us-east-1"
 }
 
-variable "server_port" {
-  description = "The port the web server will be listening"
-  type        = number
-  default     = 8080
-}
-
-variable "elb_port" {
-  description = "The port the elb will be listening"
-  type        = number
-  default     = 80
-}
-
 data "aws_availability_zones" "all" {}
 
 resource "aws_launch_configuration" "asg-launch-config-sample" {
@@ -32,7 +20,7 @@ resource "aws_launch_configuration" "asg-launch-config-sample" {
 }
 
 resource "aws_security_group" "busybox" {
-  name = "terraform-busybox-sg"
+  name = "${var.cluster_name}-busybox-sg"
   ingress {
     from_port   = var.server_port
     to_port     = var.server_port
@@ -42,7 +30,7 @@ resource "aws_security_group" "busybox" {
 }
 
 resource "aws_security_group" "elb-sg" {
-  name = "terraform-sample-elb-sg"
+  name = "${var.cluster_name}-elb-sg"
   # Allow all outbound
   egress {
     from_port   = 0
@@ -71,13 +59,13 @@ resource "aws_autoscaling_group" "asg-sample" {
 
   tag {
     key                 = "Name"
-    value               = "terraform-asg-sample"
+    value               = "${var.cluster_name}-asg"
     propagate_at_launch = true
   }
 }
 
 resource "aws_elb" "sample" {
-  name               = "terraform-asg-sample"
+  name               = "${var.cluster_name}-asg-elb"
   security_groups    = [aws_security_group.elb-sg.id]
   availability_zones = data.aws_availability_zones.all.names
 
@@ -96,9 +84,4 @@ resource "aws_elb" "sample" {
     instance_port     = var.server_port
     instance_protocol = "http"
   }
-}
-
-output "elb_dns_name" {
-  value       = aws_elb.sample.dns_name
-  description = "The domain name of the load balancer"
 }
