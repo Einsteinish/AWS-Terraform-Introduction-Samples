@@ -2,7 +2,6 @@ provider "aws" {
   region = "us-east-1"
 }
 
-
 variable "server_port" {
   description = "The port the web server will be listening"
   type        = number
@@ -102,4 +101,3 @@ output "elb_dns_name" {
   value       = aws_elb.sample.dns_name
   description = "The domain name of the load balancer"
 }
-
