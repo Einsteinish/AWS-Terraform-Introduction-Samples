@@ -2,7 +2,6 @@ provider "aws" {
   region = "us-east-1"
 }
 
-
 resource "aws_instance" "busybox_web_server" {
   ami           = "ami-07ebfd5b3428b6f4d"
   instance_type = "t2.nano"
@@ -10,7 +9,7 @@ resource "aws_instance" "busybox_web_server" {
 
   user_data = <<-EOF
               #!/bin/bash
-              echo "Hello, World" > index.html
+              echo "Hello, Terraform & AWS" > index.html
               nohup busybox httpd -f -p "${var.http_port}" &
               EOF
 
@@ -34,8 +33,6 @@ variable "http_port" {
   type        = number
   default     = 8080
 }
-
-
 
 output "public_ip" {
   value       = aws_instance.busybox_web_server.public_ip
