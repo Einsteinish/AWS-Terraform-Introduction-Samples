@@ -29,7 +29,7 @@ resource "aws_security_group" "busybox" {
 }
 
 variable "http_port" {
-  description = "The port the sweb erver will be listening"
+  description = "The port the web server will be listening"
   type        = number
   default     = 8080
 }
