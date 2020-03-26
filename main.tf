@@ -60,7 +60,6 @@ resource "aws_security_group" "elb-sg" {
   }
 }
 
-
 resource "aws_autoscaling_group" "asg-sample" {
   launch_configuration = aws_launch_configuration.asg-launch-config-sample.id
   availability_zones   = data.aws_availability_zones.all.names
