@@ -64,6 +64,7 @@ resource "aws_autoscaling_group" "asg-sample" {
   availability_zones   = data.aws_availability_zones.all.names
   min_size = 2
   max_size = 5
+  desired_capacity = 2
 
   load_balancers    = [aws_elb.sample.name]
   health_check_type = "ELB"
