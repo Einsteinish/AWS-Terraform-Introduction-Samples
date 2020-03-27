@@ -6,7 +6,7 @@ data "aws_availability_zones" "all" {}
 
 resource "aws_launch_configuration" "asg-launch-config-sample" {
   image_id          = "ami-07ebfd5b3428b6f4d"
-  instance_type = "t2.nano"
+  instance_type = var.instance_type
   security_groups = [aws_security_group.busybox.id]
   
   user_data = <<-EOF
@@ -50,9 +50,9 @@ resource "aws_security_group" "elb-sg" {
 resource "aws_autoscaling_group" "asg-sample" {
   launch_configuration = aws_launch_configuration.asg-launch-config-sample.id
   availability_zones   = data.aws_availability_zones.all.names
-  min_size = 2
-  max_size = 5
-  desired_capacity = 2
+  min_size = var.min_size
+  max_size = var.max_size
+  desired_capacity = var.desired_capacity
 
   load_balancers    = [aws_elb.sample.name]
   health_check_type = "ELB"
